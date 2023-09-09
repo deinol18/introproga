@@ -1,5 +1,7 @@
 import tkinter as tk
-from tkinter import PhotoImage
+import pygame
+
+pygame.init()
 
 def wnd_select_user():
     wnd_menu.destroy()  # Cierra la ventana principal
@@ -7,22 +9,38 @@ def wnd_select_user():
     select_user.title("Seleccionar Usuario")
     select_user.minsize(height=600, width=1200)
 
+    def guardar_en_archivo():
+        texto_ingresado = entrada.get()
+        with open("usuarios.txt", "w") as archivo:
+            archivo.write(texto_ingresado)
 
-    seleccion = PhotoImage(file="personajes.png")
+    seleccion = tk.PhotoImage(file="personajes.png")
     lbl_select = tk.Label(select_user, image=seleccion)
     lbl_select. pack()    
     
-    doomslayer = PhotoImage(file="doomslayer.png")
-    lbl_DS = tk.Label(select_user, image=doomslayer)
-    lbl_DS. place(x=330, y=200) 
+    doomslayer = tk.PhotoImage(file="ds.png")
+    btn_DS = tk.Button(select_user, image=doomslayer, border=False, command=guardar_en_archivo)    # Hacer boton
+    btn_DS. place(x=350, y=200) 
+
+    mfdoom = tk.PhotoImage(file="mfdoom.png")
+    btn_mfd = tk.Button(select_user, image=mfdoom, border=False)    # Hacer boton
+    btn_mfd. place(x=690, y=200) 
+
+    entrada = tk.Entry(select_user, width=20, font=("Arial, 20"),  fg="white", bg="black" )
+    entrada.place(y=520, x=470)
+
     
     select_user.mainloop()    # Inicia el bucle principal de la segunda ventana
 
 wnd_menu = tk.Tk()
 wnd_menu.title("Ventana con Imagen de Fondo")
 
+pygame.mixer.music.load("rolita.mp3")
+pygame.mixer.music.set_volume(0.5)  # Ajusta el volumen si es necesario
+pygame.mixer.music.play(-1)  # -1 indica que se reproduzca en bucle indefinidamente
+
 # Cargar la imagen de fondo
-doom = PhotoImage(file="doom.png")
+doom = tk.PhotoImage(file="doom.png")
 
 # Widget Label para la imagen de fondo
 lbl_fondo = tk.Label(wnd_menu, image=doom)
