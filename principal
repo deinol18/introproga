@@ -1,14 +1,35 @@
-from tkinter import *
+import tkinter as tk
+from tkinter import PhotoImage
+
+def wnd_select_user():
+    wnd_menu.destroy()  # Cierra la ventana principal
+    select_user = tk.Tk()    # Crea una nueva ventana
+    select_user.title("Seleccionar Usuario")
+    select_user.minsize(height=600, width=1200)
 
 
-# Crear una instancia de la ventana principal
-ventana = Tk()
+    seleccion = PhotoImage(file="personajes.png")
+    lbl_select = tk.Label(select_user, image=seleccion)
+    lbl_select. pack()    
+    
+    doomslayer = PhotoImage(file="doomslayer.png")
+    lbl_DS = tk.Label(select_user, image=doomslayer)
+    lbl_DS. place(x=330, y=200) 
+    
+    select_user.mainloop()    # Inicia el bucle principal de la segunda ventana
 
-# Establecer el tamaño de la ventana
-ventana.geometry("400x300")  # Ancho x Alto en píxeles
+wnd_menu = tk.Tk()
+wnd_menu.title("Ventana con Imagen de Fondo")
 
-# Definir el título de la ventana
-ventana.title("Ventana Rectangular")
+# Cargar la imagen de fondo
+doom = PhotoImage(file="doom.png")
 
-# Iniciar el bucle principal de la aplicación
-ventana.mainloop()
+# Widget Label para la imagen de fondo
+lbl_fondo = tk.Label(wnd_menu, image=doom)
+lbl_fondo.pack()
+
+# Agregar un botón que abra la segunda ventana y cierre la primera
+btn_select_user = tk.Button(wnd_menu, text="JUGAR", command=wnd_select_user, font=("Arial", 20), bg=("dark red"),fg="white" )
+btn_select_user.place(x=530, y=500)
+
+wnd_menu.mainloop()

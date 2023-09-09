@@ -1,0 +1,15 @@
+import tkinter as tk
+
+# Verificar si la fuente Helvetica está disponible
+if "Helvetica" in tk.font.families():
+    fuente = tk.font.nametofont("Helvetica")
+else:
+    # Utilizar una fuente alternativa si Helvetica no está disponible
+    fuente = tk.font.nametofont("Arial")
+
+# Usar la fuente en un widget
+etiqueta = tk.Label(text="Ejemplo de texto", font=fuente)
+etiqueta.pack()
+
+# Iniciar el bucle principal de la aplicación
+tk.mainloop()
