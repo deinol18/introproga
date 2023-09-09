@@ -1,0 +1,14 @@
+from tkinter import *
+
+
+# Crear una instancia de la ventana principal
+ventana = Tk()
+
+# Establecer el tamaño de la ventana
+ventana.geometry("400x300")  # Ancho x Alto en píxeles
+
+# Definir el título de la ventana
+ventana.title("Ventana Rectangular")
+
+# Iniciar el bucle principal de la aplicación
+ventana.mainloop()
