@@ -3,51 +3,88 @@ import pygame
 
 pygame.init()
 
+# Ventana seleccion de personaje
 def wnd_select_user():
-    wnd_menu.destroy()  # Cierra la ventana principal
-    select_user = tk.Tk()    # Crea una nueva ventana
+    wnd_menu.destroy()  
+    select_user = tk.Tk()
     select_user.title("Seleccionar Usuario")
     select_user.minsize(height=600, width=1200)
 
+    # Guardar nombre del jugador
     def guardar_en_archivo():
         texto_ingresado = entrada.get()
         with open("usuarios.txt", "w") as archivo:
             archivo.write(texto_ingresado)
 
+    # Fondo seleccion de personaje        
     seleccion = tk.PhotoImage(file="personajes.png")
     lbl_select = tk.Label(select_user, image=seleccion)
     lbl_select. pack()    
     
+    # Doomslayer
     doomslayer = tk.PhotoImage(file="ds.png")
-    btn_DS = tk.Button(select_user, image=doomslayer, border=False, command=guardar_en_archivo)    # Hacer boton
+    btn_DS = tk.Button(select_user, image=doomslayer, border=False, command=guardar_en_archivo)    
     btn_DS. place(x=350, y=200) 
 
+    # MF Doom
     mfdoom = tk.PhotoImage(file="mfdoom.png")
-    btn_mfd = tk.Button(select_user, image=mfdoom, border=False)    # Hacer boton
+    btn_mfd = tk.Button(select_user, image=mfdoom, border=False)    
     btn_mfd. place(x=690, y=200) 
 
+    # Nombre de usuario
     entrada = tk.Entry(select_user, width=20, font=("Arial, 20"),  fg="white", bg="black" )
     entrada.place(y=520, x=470)
 
     
-    select_user.mainloop()    # Inicia el bucle principal de la segunda ventana
+    select_user.mainloop()
 
+def wnd_info():
+    info_per = tk.Tk()
+    info_per.title("Información")
+    info_per.minsize(height=600, width=1200)
+
+
+    info_per.mainloop()
+
+
+def wnd_rankeds():
+    rankeds = tk.Tk()
+    rankeds.title("Tabla de puntaciones")
+    rankeds.minsize(height=600, width=1200)
+
+# Ventana principal
 wnd_menu = tk.Tk()
 wnd_menu.title("Ventana con Imagen de Fondo")
 
-pygame.mixer.music.load("rolita.mp3")
-pygame.mixer.music.set_volume(0.5)  # Ajusta el volumen si es necesario
-pygame.mixer.music.play(-1)  # -1 indica que se reproduzca en bucle indefinidamente
-
-# Cargar la imagen de fondo
+# Fondo menú principal
 doom = tk.PhotoImage(file="doom.png")
-
-# Widget Label para la imagen de fondo
 lbl_fondo = tk.Label(wnd_menu, image=doom)
 lbl_fondo.pack()
 
-# Agregar un botón que abra la segunda ventana y cierre la primera
+# Música
+pygame.mixer.music.load("rolita.mp3")
+pygame.mixer.music.play(-1)
+
+def actualizar_volumen(valor):
+    volumen = float(valor) / 100.0
+    pygame.mixer.music.set_volume(volumen)
+
+# Slider para configurar el volumen de la música
+slider_volumen = tk.Scale(wnd_menu, from_=100, to=0, orient="vertical", command=actualizar_volumen, bg=("dark red"), fg="white",  )
+slider_volumen.set(50)  # Establecer el valor inicial del volumen al 50%
+slider_volumen.place(x=1160, y=0)
+
+# Botón Para selecionar personaje
 btn_select_user = tk.Button(wnd_menu, text="JUGAR", command=wnd_select_user, font=("Arial", 20), bg=("dark red"),fg="white" )
 btn_select_user.place(x=530, y=500)
+
+# Botón para información del programa
+btn_info = tk.Button(wnd_menu, text="INFO", command=wnd_info, font=("Arial", 20), bg=("dark red"),fg="white" )
+btn_info.place(x=420, y=500)
+
+# Botón para información del programa
+btn_rankeds = tk.Button(wnd_menu, text="RANKED", command=wnd_rankeds, font=("Arial", 20), bg=("dark red"),fg="white" )
+btn_rankeds.place(x=670, y=500)
+
 
 wnd_menu.mainloop()
