@@ -4,12 +4,20 @@ import pygame
 pygame.init()
 
 # Ventana seleccion de personaje
-def wnd_select_user():
+def wnd_juego():
     wnd_menu.destroy()  
-    select_user = tk.Tk()
-    select_user.title("Seleccionar Usuario")
-    select_user.minsize(height=600, width=1200)
+    juego = tk.Tk()
+    juego.title("Juego")
+    juego.minsize(height=600, width=1200)
 
+
+
+    #doomfondo = tk.PhotoImage(file="doomfnd.png")
+    fondo1 = tk.Label(juego, width=600, height=1200, border=False, bg="#920202")
+    fondo1.place(x=0, y=0)
+    #doomfondo2 = tk.PhotoImage(file="doomfnd2.png")
+    #fondo2 = tk.Label(juego, width=300, height=600, border=False)
+    #fondo2.place(x=0, y=0)
 
     # Guardar nombre del jugador
     def guardar_en_archivo():
@@ -18,39 +26,39 @@ def wnd_select_user():
             archivo.write(texto_ingresado)
 
     # Fondo seleccion de personaje        
-    seleccion = tk.PhotoImage(file="personajes.png")
-    lbl_select = tk.Label(select_user, image=seleccion)
-    lbl_select.pack()    
+    ajedrez = tk.PhotoImage(file="ajedrez.png")
+    lbl_juego_fondo = tk.Label(juego, image=ajedrez, border=False)
+    lbl_juego_fondo.place(x=300, y=0)  
     
     # Doomslayer
     doomslayer = tk.PhotoImage(file="ds.png")
-    btn_DS = tk.Button(select_user, image=doomslayer, border=False, command=guardar_en_archivo)    
-    btn_DS. place(x=350, y=200) 
 
-    # MF Doom
-    mfdoom = tk.PhotoImage(file="mfdoom.png")
-    btn_mfd = tk.Button(select_user, image=mfdoom, border=False)    
-    btn_mfd. place(x=690, y=200) 
+
 
     # Nombre de usuario
-    entrada = tk.Entry(select_user, width=20, font=("Arial, 20"),  fg="white", bg="black" )
-    entrada.place(y=520, x=470)
 
-    slider_volumen2 = tk.Scale(select_user, from_=100, to=0, orient="vertical", command=actualizar_volumen, bg=("dark red"), fg="white",  )
+    Nombre = tk.Label(juego, text="Nombre del jugador", fg="Black", font="Arial, 15", bg="#920202")
+    Nombre.place(y=40, x=920)
+
+    entrada = tk.Entry(juego, width=20, font=("Arial, 15"),  fg="white", bg="black" )
+    entrada.place(y=75, x=920)
+
+    slider_volumen2 = tk.Scale(juego, from_=100, to=0, orient="vertical", command=actualizar_volumen, bg=("dark red"), fg="white",  )
     slider_volumen2.set(50)  # Establecer el valor inicial del volumen al 50%
     slider_volumen2.place(x=1160, y=0)
     
-    select_user.mainloop()
+    
+    juego.mainloop()
 
 def wnd_info():
-    info_per = tk.Tk()
+    info_per = tk.Toplevel()
     info_per.title("Información")
     info_per.minsize(height=600, width=1200)
 
     # Fondo informacion        
     infor = tk.PhotoImage(file="datos.png")
     lbl_inf = tk.Label(info_per, image=infor)
-    lbl_inf.pack()    
+    lbl_inf.place(x=0, y=0)    
 
     info_per.mainloop()
 
@@ -83,8 +91,8 @@ slider_volumen.set(50)  # Establecer el valor inicial del volumen al 50%
 slider_volumen.place(x=1160, y=0)
 
 # Botón Para selecionar personaje
-btn_select_user = tk.Button(wnd_menu, text="JUGAR", command=wnd_select_user, font=("Arial", 20), bg=("dark red"),fg="white" )
-btn_select_user.place(x=530, y=500)
+btn_juego = tk.Button(wnd_menu, text="JUGAR", command=wnd_juego, font=("Arial", 20), bg=("dark red"),fg="white" )
+btn_juego.place(x=530, y=500)
 
 # Botón para información del programa
 btn_info = tk.Button(wnd_menu, text="INFO", command=wnd_info, font=("Arial", 20), bg=("dark red"),fg="white" )
