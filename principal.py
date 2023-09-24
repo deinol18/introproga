@@ -60,6 +60,9 @@ def wnd_info():
     lbl_inf = tk.Label(info_per, image=infor)
     lbl_inf.place(x=0, y=0)    
 
+    btn_cerrarinfo = tk.Button(info_per, command=info_per.destroy,  font=("Arial", 20), bg=("dark red"),fg="white" , text="Volver")
+    btn_cerrarinfo.place(x=1050, y= 500)
+
     info_per.mainloop()
 
 
@@ -67,6 +70,12 @@ def wnd_rankeds():
     rankeds = tk.Tk()
     rankeds.title("Tabla de puntaciones")
     rankeds.minsize(height=600, width=1200)
+
+    lbl_fondoranked = tk.Label(rankeds, bg="#920202", width=1200, height=600)
+    lbl_fondoranked.place(x=0, y=0)
+
+    btn_cerrarranked = tk.Button(rankeds, command=rankeds.destroy,  font=("Arial", 20), bg=("dark red"),fg="white" , text="Volver")
+    btn_cerrarranked.place(x=1050, y= 500)
 
 # Ventana principal
 wnd_menu = tk.Tk()
