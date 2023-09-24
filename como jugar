@@ -1,0 +1,29 @@
+Teclas para jugar:
+
+Movimiento:
+    w: Arriba
+    s: Abajo
+    d: Derecha
+    a: Izquierda
+    q: Diagonal Izquierda   /   Arriba
+    e: Diagonal Derecha     /   Arriba
+    z: Diagonal Izquierda   /   Abajo
+    c: Diagonal Derecha     /   abajo
+
+Ataque:
+    Disparos:
+        u: Arriba
+        j: Abajo
+        k: Derecha
+        h: Izquierda
+        y: Diagonal Izquierda   /   Arriba
+        i: Diagonal Derecha     /   Arriba
+        n: Diagonal Izquierda   /   Abajo
+        m: Diagonal Derecha     /   abajo
+    Bomba:
+        b: Poner la bomba en el lugar donde está el usuario
+
+Teleportación:
+    t: Teletransportación random
+    g: Telestransportación
+    

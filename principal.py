@@ -3,21 +3,19 @@ import pygame
 
 pygame.init()
 
+
 # Ventana seleccion de personaje
 def wnd_juego():
+    
     wnd_menu.destroy()  
     juego = tk.Tk()
     juego.title("Juego")
     juego.minsize(height=600, width=1200)
 
-
-
     #doomfondo = tk.PhotoImage(file="doomfnd.png")
     fondo1 = tk.Label(juego, width=600, height=1200, border=False, bg="#920202")
     fondo1.place(x=0, y=0)
-    #doomfondo2 = tk.PhotoImage(file="doomfnd2.png")
-    #fondo2 = tk.Label(juego, width=300, height=600, border=False)
-    #fondo2.place(x=0, y=0)
+
 
     # Guardar nombre del jugador
     def guardar_en_archivo():
@@ -33,10 +31,7 @@ def wnd_juego():
     # Doomslayer
     doomslayer = tk.PhotoImage(file="ds.png")
 
-
-
     # Nombre de usuario
-
     Nombre = tk.Label(juego, text="Nombre del jugador", fg="Black", font="Arial, 15", bg="#920202")
     Nombre.place(y=40, x=920)
 
@@ -79,8 +74,7 @@ def wnd_rankeds():
 
 # Ventana principal
 wnd_menu = tk.Tk()
-wnd_menu.title("Ventana con Imagen de Fondo")
-
+wnd_menu.title("Inicio")
 # Fondo menú principal
 doom = tk.PhotoImage(file="doom.png")
 lbl_fondo = tk.Label(wnd_menu, image=doom)

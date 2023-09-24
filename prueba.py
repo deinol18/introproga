@@ -5,6 +5,9 @@ import random
 filas = 15
 columnas = 15
 
+#puntos
+puntos=0
+
 # Crear el tablero
 tablero = [[' ' for _ in range(columnas)] for _ in range(filas)]
 
@@ -14,7 +17,7 @@ robot_columna = random.randint(0, columnas - 1)
 tablero[robot_fila][robot_columna] = 'R'
 
 # Colocar robots enemigos en posiciones aleatorias
-num_robots_enemigos = 5
+num_robots_enemigos = 10
 enemigos = []
 
 for _ in range(num_robots_enemigos):
@@ -26,11 +29,6 @@ for _ in range(num_robots_enemigos):
             enemigos.append((fila, columna))
             break
 
-# Colocar el objetivo en una posición aleatoria
-objetivo_fila = random.randint(0, filas - 1)
-objetivo_columna = random.randint(0, columnas - 1)
-tablero[objetivo_fila][objetivo_columna] = 'O'
-
 # Función para mostrar el tablero en la ventana
 def mostrar_tablero():
     for i in range(filas):
@@ -40,39 +38,200 @@ def mostrar_tablero():
 
 # Función para mover al robot y a los enemigos
 def mover(event):
-    global robot_fila, robot_columna
+    movimiento=False
+    disparo=False
+    global robot_fila, robot_columna, puntos, tablero
     key = event.keysym
-    tablero[robot_fila][robot_columna] = ' '
+    if tablero[robot_fila][robot_columna]!="O":
+        tablero[robot_fila][robot_columna] = ' '
     if key == 'w' and robot_fila > 0:
         robot_fila -= 1
+        movimiento=True
+    elif key == 'w' and robot_fila == 0:
+        robot_fila = 14
+        movimiento=True
     elif key == 's' and robot_fila < filas - 1:
         robot_fila += 1
+        movimiento=True
+    elif key == 's' and robot_fila == filas - 1:
+        robot_fila = 0
+        movimiento=True
     elif key == 'a' and robot_columna > 0:
         robot_columna -= 1
+        movimiento=True
+    elif key == 'a' and robot_columna == 0:
+        robot_columna = 14
+        movimiento=True
     elif key == 'd' and robot_columna < columnas - 1:
         robot_columna += 1
+        movimiento=True
+    elif key == 'd' and robot_columna == columnas - 1:
+        robot_columna = 0
+        movimiento=True
     elif key == 'q' and robot_fila > 0 and robot_columna > 0:
         robot_fila -= 1
         robot_columna -= 1
+        movimiento=True
+    elif key == 'q' and robot_fila == 0 and robot_columna == 0:
+        robot_fila = 14
+        robot_columna = 14
+        movimiento=True
     elif key == 'e' and robot_fila > 0 and robot_columna < columnas - 1:
         robot_fila -= 1
         robot_columna += 1
+        movimiento=True
+    elif key == 'e' and robot_fila == 0 and robot_columna == columnas - 1:
+        robot_fila = 14
+        robot_columna = 0
+        movimiento=True
     elif key == 'z' and robot_fila < filas - 1 and robot_columna > 0:
         robot_fila += 1
         robot_columna -= 1
+        movimiento=True
+    elif key == 'z' and robot_fila == filas - 1 and robot_columna == 0:
+        robot_fila = 0
+        robot_columna = 14
+        movimiento=True
     elif key == 'c' and robot_fila < filas - 1 and robot_columna < columnas - 1:
         robot_fila += 1
         robot_columna += 1
-    tablero[robot_fila][robot_columna] = 'R'
-    eliminar_enemigos()
-    if (robot_fila, robot_columna) in enemigos:
+        movimiento=True
+    elif key == 'c' and robot_fila == filas - 1 and robot_columna == columnas - 1:
+        robot_fila = 0
+        robot_columna = 0
+        movimiento=True
+    elif key == 'u':
+        if tablero[pos(robot_fila,-1)][robot_columna]=='E':
+            eliminar_enemigos(pos(robot_fila,-1),robot_columna)
+            
+        elif tablero[pos(robot_fila,-2)][robot_columna]=='E':
+            eliminar_enemigos(pos(robot_fila,-2),robot_columna)
+            
+        else:
+            print("logica de disparos") 
+        disparo=True
+    elif key == 'j':
+        if tablero[pos(robot_fila,1)][robot_columna]=='E':
+            eliminar_enemigos(pos(robot_fila,1),robot_columna)
+        elif tablero[pos(robot_fila,2)][robot_columna]=='E':
+            eliminar_enemigos(pos(robot_fila,2),robot_columna)
+        else:
+            print("logica de disparos") 
+        disparo=True
+    elif key == 'h':
+        if tablero[robot_fila][pos(robot_columna,-1)] == 'E':
+            eliminar_enemigos(robot_fila,pos(robot_columna,-1))
+        elif tablero[robot_fila][pos(robot_columna,-2)] == 'E':
+            eliminar_enemigos(robot_fila,pos(robot_columna,-2))
+        else:
+            print("logica de disparos")    
+        disparo=True
+    elif key == 'k':
+        if tablero[robot_fila][pos(robot_columna,1)] == 'E':
+            eliminar_enemigos(robot_fila,pos(robot_columna,1))
+        elif tablero[robot_fila][pos(robot_columna,2)] == 'E':
+            eliminar_enemigos(robot_fila,pos(robot_columna,2))
+        else:
+            print("logica de disparos")    
+        disparo=True
+    elif key == 'y':
+        if tablero[pos(robot_fila,-1)][pos(robot_columna,-1)]== 'E':
+            eliminar_enemigos(pos(robot_fila,-1),pos(robot_columna,-1))
+        elif tablero[pos(robot_fila,-2)][pos(robot_columna,-2)]== 'E':
+            eliminar_enemigos(pos(robot_fila,-2),pos(robot_columna,-2))
+        else:
+            print("logica de disparos")
+        disparo=True
+    elif key == 'i':
+        if tablero[pos(robot_fila,-1)][pos(robot_columna,1)]== 'E':
+            eliminar_enemigos(pos(robot_fila,-1),pos(robot_columna,1))
+        elif tablero[pos(robot_fila,-2)][pos(robot_columna,2)]== 'E':
+            eliminar_enemigos(pos(robot_fila,-2),pos(robot_columna,2))
+        else:
+            print("logica de disparos")
+        disparo=True
+    elif key == 'n':
+        if tablero[pos(robot_fila,1)][pos(robot_columna,-1)]== 'E':
+            eliminar_enemigos(pos(robot_fila,1),pos(robot_columna,-1))
+        elif tablero[pos(robot_fila,2)][pos(robot_columna,-2)]== 'E':
+            eliminar_enemigos(pos(robot_fila,2),pos(robot_columna,-2))
+        else:
+            print("logica de disparos")
+        disparo=True
+    elif key == 'm':
+        if tablero[pos(robot_fila,1)][pos(robot_columna,1)]== 'E':
+            eliminar_enemigos(pos(robot_fila,1),pos(robot_columna,1))
+        elif tablero[pos(robot_fila,2)][pos(robot_columna,2)]== 'E':
+            eliminar_enemigos(pos(robot_fila,2),pos(robot_columna,2))
+        else:
+            print("logica de disparos")
+        disparo=True
+    elif key=="b":
+        tablero[robot_fila][robot_columna] = 'O'
+        
+    elif key=="t":
+        robot_fila = random.randint(0, filas - 1)
+        robot_columna = random.randint(0, columnas - 1)
+        if tablero[robot_fila][robot_columna]=="E":
+            perder_juego()
+        elif tablero[robot_fila][robot_columna]=="X":
+            perder_juego()
+        else:
+            disparo=True
+            
+    elif key=="g":
+        while(True):
+            robot_fila = random.randint(0, filas - 1)
+            robot_columna = random.randint(0, columnas - 1)
+            if tablero[robot_fila][robot_columna]==' ' and tablero[pos(robot_fila,-1)][robot_columna]==' ' and tablero[pos(robot_fila,1)][robot_columna]==' ' and tablero[robot_fila][pos(robot_columna,-1)] == ' ' and tablero[robot_fila][pos(robot_columna,1)] == ' ' and tablero[pos(robot_fila,-1)][pos(robot_columna,-1)]== ' ' and tablero[pos(robot_fila,-1)][pos(robot_columna,1)]== ' ' and tablero[pos(robot_fila,1)][pos(robot_columna,-1)]== ' ' and tablero[pos(robot_fila,1)][pos(robot_columna,1)]== ' ':
+                break
+            disparo=True
+        
+        
+    if movimiento:
+        tablero[robot_fila][robot_columna] = 'R'
+        eliminar_enemigos(0,0)
+        if (robot_fila, robot_columna) in enemigos:
+            mostrar_tablero()
+            perder_juego()
+    
+        puntos += 5
+        mover_enemigos()
         mostrar_tablero()
-        perder_juego()
-    mover_enemigos()
-    mostrar_tablero()
+        return tablero
+    if disparo:
+        tablero[robot_fila][robot_columna] = 'R'
+        eliminar_enemigos(0,0)
+        mostrar_tablero()
+        return tablero
+        
+        
+def pos(actual, incremento):
+    if actual==13 and incremento == 2:
+        return 0
+    elif actual==14 and incremento == 1:
+        return 0
+    elif actual==14 and incremento == 2:
+        return 1
+    elif actual==0 and incremento == -1:
+        return 14
+    elif actual==0 and incremento == -2:
+        return 13
+    elif actual == 1 and incremento == -2:
+        return 14
+    else:
+        return actual+incremento
+
+
+        
+
+
 
 # Función para eliminar enemigos que estén uno al lado del otro
-def eliminar_enemigos():
+def eliminar_enemigos(a,b):
+    ban=False
+    if a!=0 and b!=0:
+        ban=True
     i = 0
     while i < len(enemigos) - 1:
         fila1, columna1 = enemigos[i]
@@ -84,6 +243,18 @@ def eliminar_enemigos():
             del enemigos[i]  # Eliminar el segundo enemigo
         else:
             i += 1
+    for j in range(len(enemigos)-1):
+        fila, columna = enemigos[j]
+        if a==fila and b==columna:
+            del enemigos[j]
+            tablero[a][b] = ' '
+            ban=False
+    if ban:
+        enemigos.pop()
+        tablero[a][b] = ' '
+        
+            
+        
 
 # Función para mover a los enemigos un lugar en una dirección aleatoria
 def mover_enemigos():
@@ -119,8 +290,8 @@ def mover_enemigos():
         elif tablero[nueva_fila][nueva_columna] == 'O':
             # Si un enemigo llega al objetivo, se reinicia su posición
             tablero[fila][columna] = ' '
-            tablero[objetivo_fila][objetivo_columna] = 'O'
-            enemigos[i] = (objetivo_fila, objetivo_columna)
+            tablero[nueva_fila][nueva_columna] = ' '
+            del enemigos[i]
 
 # Función para indicar que el jugador ha perdido
 def perder_juego():
