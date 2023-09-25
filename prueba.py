@@ -1,5 +1,12 @@
 import tkinter as tk
 import random
+import pygame
+
+def play_sound():
+    pygame.mixer.init()
+    pygame.mixer.music.load("escopeta.mp3") 
+    pygame.mixer.music.set_volume(0.1)  # Establece el volumen actual
+    pygame.mixer.music.play()
 
 # Definir el tamaño del tablero
 filas = 15
@@ -17,8 +24,14 @@ robot_columna = random.randint(0, columnas - 1)
 tablero[robot_fila][robot_columna] = 'R'
 
 # Colocar robots enemigos en posiciones aleatorias
-num_robots_enemigos = 10
+num_robots_enemigos = 5
+bombas_iniciales=2
+disparos_iniciales=10
 enemigos = []
+
+bombas=bombas_iniciales
+disparos=disparos_iniciales
+
 
 for _ in range(num_robots_enemigos):
     while True:
@@ -36,11 +49,11 @@ def mostrar_tablero():
             label = tk.Label(root, text=tablero[i][j], width=4, height=2)
             label.grid(row=i, column=j)
 
-# Función para mover al robot y a los enemigos
+# Función para mover al robot y a los enemigos, disparar, dejar bombas y teletransportarse
 def mover(event):
     movimiento=False
     disparo=False
-    global robot_fila, robot_columna, puntos, tablero
+    global robot_fila, robot_columna, puntos, tablero, bombas, disparos, disparos_iniciales, bombas_iniciales
     key = event.keysym
     if tablero[robot_fila][robot_columna]!="O":
         tablero[robot_fila][robot_columna] = ' '
@@ -101,6 +114,7 @@ def mover(event):
         robot_columna = 0
         movimiento=True
     elif key == 'u':
+        play_sound()
         if tablero[pos(robot_fila,-1)][robot_columna]=='E':
             eliminar_enemigos(pos(robot_fila,-1),robot_columna)
             
@@ -108,86 +122,112 @@ def mover(event):
             eliminar_enemigos(pos(robot_fila,-2),robot_columna)
             
         else:
-            print("logica de disparos") 
+            disparos -=1 
         disparo=True
     elif key == 'j':
+        play_sound()
         if tablero[pos(robot_fila,1)][robot_columna]=='E':
             eliminar_enemigos(pos(robot_fila,1),robot_columna)
         elif tablero[pos(robot_fila,2)][robot_columna]=='E':
             eliminar_enemigos(pos(robot_fila,2),robot_columna)
         else:
-            print("logica de disparos") 
+            disparos -=1 
         disparo=True
     elif key == 'h':
+        play_sound()
         if tablero[robot_fila][pos(robot_columna,-1)] == 'E':
             eliminar_enemigos(robot_fila,pos(robot_columna,-1))
         elif tablero[robot_fila][pos(robot_columna,-2)] == 'E':
             eliminar_enemigos(robot_fila,pos(robot_columna,-2))
         else:
-            print("logica de disparos")    
+            disparos -=1    
         disparo=True
     elif key == 'k':
+        play_sound()
         if tablero[robot_fila][pos(robot_columna,1)] == 'E':
             eliminar_enemigos(robot_fila,pos(robot_columna,1))
         elif tablero[robot_fila][pos(robot_columna,2)] == 'E':
             eliminar_enemigos(robot_fila,pos(robot_columna,2))
         else:
-            print("logica de disparos")    
+            disparos -=1    
         disparo=True
     elif key == 'y':
+        play_sound()
         if tablero[pos(robot_fila,-1)][pos(robot_columna,-1)]== 'E':
             eliminar_enemigos(pos(robot_fila,-1),pos(robot_columna,-1))
         elif tablero[pos(robot_fila,-2)][pos(robot_columna,-2)]== 'E':
             eliminar_enemigos(pos(robot_fila,-2),pos(robot_columna,-2))
         else:
-            print("logica de disparos")
+            disparos -=1
         disparo=True
     elif key == 'i':
+        play_sound()
         if tablero[pos(robot_fila,-1)][pos(robot_columna,1)]== 'E':
             eliminar_enemigos(pos(robot_fila,-1),pos(robot_columna,1))
         elif tablero[pos(robot_fila,-2)][pos(robot_columna,2)]== 'E':
             eliminar_enemigos(pos(robot_fila,-2),pos(robot_columna,2))
         else:
-            print("logica de disparos")
+            disparos -=1
         disparo=True
     elif key == 'n':
+        play_sound()
         if tablero[pos(robot_fila,1)][pos(robot_columna,-1)]== 'E':
             eliminar_enemigos(pos(robot_fila,1),pos(robot_columna,-1))
         elif tablero[pos(robot_fila,2)][pos(robot_columna,-2)]== 'E':
             eliminar_enemigos(pos(robot_fila,2),pos(robot_columna,-2))
         else:
-            print("logica de disparos")
+            disparos -=1
         disparo=True
     elif key == 'm':
+        play_sound()
         if tablero[pos(robot_fila,1)][pos(robot_columna,1)]== 'E':
             eliminar_enemigos(pos(robot_fila,1),pos(robot_columna,1))
         elif tablero[pos(robot_fila,2)][pos(robot_columna,2)]== 'E':
             eliminar_enemigos(pos(robot_fila,2),pos(robot_columna,2))
         else:
-            print("logica de disparos")
+            disparos -=1
         disparo=True
     elif key=="b":
-        tablero[robot_fila][robot_columna] = 'O'
+        play_sound()
+        if bombas!=0:
+            tablero[robot_fila][robot_columna] = 'O'
+            bombas -=1
         
     elif key=="t":
-        robot_fila = random.randint(0, filas - 1)
-        robot_columna = random.randint(0, columnas - 1)
-        if tablero[robot_fila][robot_columna]=="E":
-            perder_juego()
-        elif tablero[robot_fila][robot_columna]=="X":
-            perder_juego()
-        else:
-            disparo=True
-            
-    elif key=="g":
-        while(True):
+        if puntos > 5:
             robot_fila = random.randint(0, filas - 1)
             robot_columna = random.randint(0, columnas - 1)
-            if tablero[robot_fila][robot_columna]==' ' and tablero[pos(robot_fila,-1)][robot_columna]==' ' and tablero[pos(robot_fila,1)][robot_columna]==' ' and tablero[robot_fila][pos(robot_columna,-1)] == ' ' and tablero[robot_fila][pos(robot_columna,1)] == ' ' and tablero[pos(robot_fila,-1)][pos(robot_columna,-1)]== ' ' and tablero[pos(robot_fila,-1)][pos(robot_columna,1)]== ' ' and tablero[pos(robot_fila,1)][pos(robot_columna,-1)]== ' ' and tablero[pos(robot_fila,1)][pos(robot_columna,1)]== ' ':
-                break
-            disparo=True
+            if tablero[robot_fila][robot_columna]=="E":
+                perder_juego()
+            elif tablero[robot_fila][robot_columna]=="X":
+                perder_juego()
+            else:
+                disparo=True
+            puntos -= 5
+            
+    elif key=="g":
+        if puntos > 25:
+            while(True):
+                robot_fila = random.randint(0, filas - 1)
+                robot_columna = random.randint(0, columnas - 1)
+                if tablero[robot_fila][robot_columna]==' ' and tablero[pos(robot_fila,-1)][robot_columna]==' ' and tablero[pos(robot_fila,1)][robot_columna]==' ' and tablero[robot_fila][pos(robot_columna,-1)] == ' ' and tablero[robot_fila][pos(robot_columna,1)] == ' ' and tablero[pos(robot_fila,-1)][pos(robot_columna,-1)]== ' ' and tablero[pos(robot_fila,-1)][pos(robot_columna,1)]== ' ' and tablero[pos(robot_fila,1)][pos(robot_columna,-1)]== ' ' and tablero[pos(robot_fila,1)][pos(robot_columna,1)]== ' ':
+                    break
+                puntos -= 25
+                disparo=True
+    if enemigos==[]:
+        bombas=bombas_iniciales+1
+        disparos=disparos_iniciales
+        for _ in range(num_robots_enemigos+5):
+            while True:
+                fila = random.randint(0, filas - 1)
+                columna = random.randint(0, columnas - 1)
+                if tablero[fila][columna] == ' ':
+                    tablero[fila][columna] = 'E'
+                    enemigos.append((fila, columna))
+                    break
         
-        
+    
+    # Función para actualizar el tablero    
     if movimiento:
         tablero[robot_fila][robot_columna] = 'R'
         eliminar_enemigos(0,0)
@@ -198,14 +238,17 @@ def mover(event):
         puntos += 5
         mover_enemigos()
         mostrar_tablero()
+        print(puntos,bombas,disparos)
         return tablero
     if disparo:
         tablero[robot_fila][robot_columna] = 'R'
         eliminar_enemigos(0,0)
         mostrar_tablero()
+        print(puntos,bombas,disparos)
         return tablero
         
-        
+
+# Función para la posición
 def pos(actual, incremento):
     if actual==13 and incremento == 2:
         return 0
@@ -223,12 +266,9 @@ def pos(actual, incremento):
         return actual+incremento
 
 
-        
-
-
-
 # Función para eliminar enemigos que estén uno al lado del otro
 def eliminar_enemigos(a,b):
+    global  puntos, disparos
     ban=False
     if a!=0 and b!=0:
         ban=True
@@ -249,13 +289,15 @@ def eliminar_enemigos(a,b):
             del enemigos[j]
             tablero[a][b] = ' '
             ban=False
+            puntos += 10
+            disparos -=1
     if ban:
         enemigos.pop()
         tablero[a][b] = ' '
+        puntos += 10
+        disparos -=1
         
             
-        
-
 # Función para mover a los enemigos un lugar en una dirección aleatoria
 def mover_enemigos():
     for i, (fila, columna) in enumerate(enemigos):
@@ -295,6 +337,7 @@ def mover_enemigos():
 
 # Función para indicar que el jugador ha perdido
 def perder_juego():
+    global  puntos, nombre
     perder_window = tk.Toplevel(root)
     perder_window.title("¡Perdiste!")
     perder_label = tk.Label(perder_window, text="Tocaste a un enemigo. ¡Has perdido!")
@@ -302,9 +345,54 @@ def perder_juego():
     perder_button = tk.Button(perder_window, text="Cerrar", command=perder_window.destroy)
     perder_button.pack()
 
+    entrada = tk.Entry(perder_window, width=20, font=("Arial, 15"),  fg="white", bg="black" )
+    entrada.pack()
+    nombre = entrada.get()
+
+    resultado=[puntos,nombre]
+    resultados=lector()
+    resultados=resultados+[resultado]
+    resultados=ordenar(resultados)
+    escritor(resultados)
+    print(nombre)
+
+
+# Agregar texto al txt "usuarios"
+def ordenar(matriz):
+    return sorted(matriz, key=lambda x: x[0], reverse=True)
+
+def lector():
+    
+    with open('usuarios.txt', 'r') as archivo:
+        datos = []
+        for linea in archivo:
+            partes = linea.strip().split(',')
+            if len(partes) >= 2:
+                numero = int(partes[0])
+                nombre = partes[1]
+                datos.append([numero, nombre])
+
+    return datos
+
+def escritor(lista):
+    with open('usuarios.txt', 'w') as archivo:
+        for dato in lista:
+            linea = ','.join(map(str, dato))
+            archivo.write(linea + '\n')
+
+
+
+
 # Configurar la ventana principal
 root = tk.Tk()
 root.title("Juego Robots")
+
+
+
+puntaje = tk.Label(root, text="Puntaje: ")
+
+puntaje.pack()
+
 
 # Mostrar el tablero inicial
 mostrar_tablero()
