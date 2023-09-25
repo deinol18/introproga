@@ -2,6 +2,8 @@ import tkinter as tk
 import random
 import pygame
 
+
+# Sonido al disparar
 def play_sound():
     pygame.mixer.init()
     pygame.mixer.music.load("escopeta.mp3") 
@@ -12,27 +14,24 @@ def play_sound():
 filas = 15
 columnas = 15
 
-#puntos
-puntos=0
-
 # Crear el tablero
 tablero = [[' ' for _ in range(columnas)] for _ in range(filas)]
 
-# Colocar el robot en una posición aleatoria
+# Colocar el jugador en una posición aleatoria
 robot_fila = random.randint(0, filas - 1)
 robot_columna = random.randint(0, columnas - 1)
 tablero[robot_fila][robot_columna] = 'R'
 
-# Colocar robots enemigos en posiciones aleatorias
-num_robots_enemigos = 5
-bombas_iniciales=2
-disparos_iniciales=10
+# Variables
+num_robots_enemigos = 10
+bombas_iniciales = 4
+disparos_iniciales = 20
 enemigos = []
+puntos = 0
+bombas = bombas_iniciales
+disparos = disparos_iniciales
 
-bombas=bombas_iniciales
-disparos=disparos_iniciales
-
-
+# Función para colocar robots enemigos en posiciones aleatorias
 for _ in range(num_robots_enemigos):
     while True:
         fila = random.randint(0, filas - 1)
@@ -55,6 +54,7 @@ def mover(event):
     disparo=False
     global robot_fila, robot_columna, puntos, tablero, bombas, disparos, disparos_iniciales, bombas_iniciales
     key = event.keysym
+    # Movimiento
     if tablero[robot_fila][robot_columna]!="O":
         tablero[robot_fila][robot_columna] = ' '
     if key == 'w' and robot_fila > 0:
@@ -113,6 +113,7 @@ def mover(event):
         robot_fila = 0
         robot_columna = 0
         movimiento=True
+    # Disparos
     elif key == 'u':
         play_sound()
         if tablero[pos(robot_fila,-1)][robot_columna]=='E':
@@ -187,13 +188,15 @@ def mover(event):
         else:
             disparos -=1
         disparo=True
+    # Bomba
     elif key=="b":
         play_sound()
         if bombas!=0:
             tablero[robot_fila][robot_columna] = 'O'
             bombas -=1
-        
-    elif key=="t":
+
+    # Teletransportes
+    elif key=="t":  #Random
         if puntos > 5:
             robot_fila = random.randint(0, filas - 1)
             robot_columna = random.randint(0, columnas - 1)
@@ -204,8 +207,7 @@ def mover(event):
             else:
                 disparo=True
             puntos -= 5
-            
-    elif key=="g":
+    elif key=="g":  #Segura
         if puntos > 25:
             while(True):
                 robot_fila = random.randint(0, filas - 1)
@@ -214,6 +216,7 @@ def mover(event):
                     break
                 puntos -= 25
                 disparo=True
+    # Movimiento de los enemigos
     if enemigos==[]:
         bombas=bombas_iniciales+1
         disparos=disparos_iniciales
@@ -381,17 +384,9 @@ def escritor(lista):
             archivo.write(linea + '\n')
 
 
-
-
 # Configurar la ventana principal
 root = tk.Tk()
 root.title("Juego Robots")
-
-
-
-puntaje = tk.Label(root, text="Puntaje: ")
-
-puntaje.pack()
 
 
 # Mostrar el tablero inicial
